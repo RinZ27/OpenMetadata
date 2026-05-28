@@ -17,6 +17,12 @@ from typing import Optional
 
 from botocore.exceptions import ClientError
 
+from metadata.generated.schema.security.secrets.secretsManagerClientLoader import (
+    SecretsManagerClientLoader,
+)
+from metadata.generated.schema.security.secrets.secretsManagerProvider import (
+    SecretsManagerProvider,
+)
 from metadata.utils.secrets.aws_based_secrets_manager import (
     AWSBasedSecretsManager,
     NULL_VALUE,
@@ -30,6 +36,13 @@ class AWSSecretsManager(AWSBasedSecretsManager):
     """
     AWS Secrets Manager
     """
+
+    def __init__(self, loader: SecretsManagerClientLoader):
+        super().__init__(
+            client="secretsmanager",
+            provider=SecretsManagerProvider.aws,
+            loader=loader,
+        )
 
     def get_string_value(self, secret_id: str) -> Optional[str]:  # noqa: UP045
         """
